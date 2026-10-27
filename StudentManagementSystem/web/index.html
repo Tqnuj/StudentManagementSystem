@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#193d35">
+  <meta name="description" content="A simple student management dashboard for a C++ coursework project.">
+  <title>CampusDesk — Student Management</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="CampusDesk home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 12.2 16 5l12 7.2-12 7.1L4 12.2Z"/><path d="M8.5 15.2v6.1c4.7 4 9.8 4 15 0v-6.1M27.7 13v7.4"/></svg></span>
+        <span class="brand-copy"><strong>CampusDesk</strong><small>Student records</small></span>
+      </a>
+
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="main-nav">
+        <a class="nav-link active" href="#overview" aria-current="page"><span class="nav-icon">▦</span> Overview</a>
+        <a class="nav-link" href="#student-list"><span class="nav-icon">♧</span> Students <span class="nav-count" id="navStudentCount">—</span></a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <div class="help-icon">✳</div>
+          <strong>Keeping things organised</strong>
+          <p>A small, clear space for your student records.</p>
+          <a href="/recovery-guide" target="_blank" rel="noopener">Data & recovery guide <span>↗</span></a>
+        </div>
+        <div class="profile-row">
+          <div class="profile-avatar">AD</div>
+          <div class="profile-copy"><strong>Administrator</strong><span>Local workspace</span></div>
+          <span class="profile-dots" aria-hidden="true">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><strong>Overview</strong></div>
+        <div class="topbar-right"><span class="local-chip"><span class="live-dot"></span> Local workspace</span><span class="top-date" id="currentDate">Today</span></div>
+      </header>
+
+      <section class="page-heading">
+        <div>
+          <div class="eyebrow"><span class="eyebrow-line"></span> STUDENT ADMINISTRATION</div>
+          <h1>Good to see you<span class="heading-period">.</span></h1>
+          <p class="heading-subtitle">A quick look at your campus records, all in one place.</p>
+        </div>
+        <button class="button button-primary" id="addStudentTop"><span class="button-plus">＋</span> Add student</button>
+      </section>
+
+      <section id="recoveryBanner" class="recovery-banner hidden" role="alert">
+        <div class="recovery-symbol">!</div>
+        <div class="recovery-copy"><strong>Read-only recovery mode</strong><p id="recoveryMessage">The student data needs attention. Changes are temporarily disabled to protect your records.</p><ul id="recoveryReasons"></ul><a href="/recovery-guide" target="_blank" rel="noopener">Open recovery guide ↗</a></div>
+      </section>
+
+      <section class="metric-grid" aria-label="Student summary">
+        <article class="metric-card metric-total">
+          <div class="metric-top"><span class="metric-label">Total students</span><span class="metric-icon icon-people">♧</span></div>
+          <div class="metric-value" id="totalStudents">—</div>
+          <div class="metric-foot"><span class="metric-dot"></span><span id="totalStudentsFoot">Records in your workspace</span></div>
+          <span class="metric-watermark">01</span>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Active students</span><span class="metric-icon icon-active">✓</span></div>
+          <div class="metric-value" id="activeStudents">—</div>
+          <div class="metric-foot"><span class="positive-dot"></span><span id="activeStudentsFoot">Currently marked active</span></div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Average GPA</span><span class="metric-icon icon-gpa">↗</span></div>
+          <div class="metric-value" id="averageGpa">—<small> / 10</small></div>
+          <div class="metric-foot"><span class="metric-dot amber-dot"></span><span>Across all student records</span></div>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span class="metric-label">Departments</span><span class="metric-icon icon-dept">⌘</span></div>
+          <div class="metric-value" id="departmentCount">—</div>
+          <div class="metric-foot"><span class="metric-dot violet-dot"></span><span>Areas of study represented</span></div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel student-panel" id="student-list">
+          <div class="panel-heading student-panel-heading">
+            <div><div class="panel-kicker">DIRECTORY</div><h2>Student records</h2><p class="panel-description">View and manage your student details.</p></div>
+            <button class="button button-secondary button-small" id="exportCsvButton" title="Download a copy of the current records as CSV"><span class="export-icon">↓</span> Export CSV</button>
+          </div>
+          <div class="toolbar">
+            <label class="search-box"><span class="search-icon" aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search name, roll no. or department…" autocomplete="off"><kbd>/</kbd></label>
+            <div class="toolbar-filters">
+              <label class="sr-only" for="departmentFilter">Filter by department</label>
+              <select id="departmentFilter"><option value="all">All departments</option></select>
+              <label class="sr-only" for="statusFilter">Filter by status</label>
+              <select id="statusFilter"><option value="all">All statuses</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col">STUDENT</th><th scope="col">DEPARTMENT</th><th scope="col">YEAR</th><th scope="col">GPA</th><th scope="col">STATUS</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="studentTableBody"><tr><td colspan="6" class="table-state"><span class="spinner"></span> Loading student records…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span id="resultCount">Showing records</span><span class="table-footer-note"><span class="footer-check">✓</span> Saved to local CSV</span></div>
+        </article>
+
+        <aside class="side-column">
+          <article class="panel insight-panel">
+            <div class="panel-heading compact-heading"><div><div class="panel-kicker">AT A GLANCE</div><h2>By department</h2></div><span class="chart-head-icon">▥</span></div>
+            <p class="panel-description">How your student records are distributed.</p>
+            <div id="departmentChart" class="department-chart"><div class="chart-empty">Your department summary will appear here.</div></div>
+            <div class="chart-bottom"><span>All records</span><strong id="chartTotal">— students</strong></div>
+          </article>
+          <article class="note-card">
+            <div class="note-top"><span class="note-mark">✦</span><span class="note-tag">A SMALL REMINDER</span></div>
+            <h3>Good records make<br>good decisions.</h3>
+            <p>Keep roll numbers unique and contact details up to date so everything stays easy to find.</p>
+            <div class="note-decoration" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </article>
+          <div class="storage-note"><span class="storage-lock">⌑</span><p><strong>Stored on this computer</strong><br>Your records are saved in the project's <code>data/students.csv</code> file.</p></div>
+        </aside>
+      </section>
+      <footer class="page-footer"><span>CampusDesk <span class="footer-dot">•</span> Student Management System</span><span id="storageStatus"><span class="status-dot"></span> Checking storage…</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="studentModal" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><div><div class="panel-kicker" id="modalKicker">STUDENT DIRECTORY</div><h2 id="modalTitle">Add a student</h2><p>Fill in the details below. Fields marked * are required.</p></div><button class="close-button" id="closeModal" type="button" aria-label="Close dialog">×</button></div>
+      <form id="studentForm">
+        <input id="studentId" type="hidden">
+        <div class="form-grid">
+          <label class="form-field field-full"><span>Full name <b>*</b></span><input id="studentName" name="name" maxlength="80" required placeholder="e.g. Ananya Rao"></label>
+          <label class="form-field"><span>Roll number <b>*</b></span><input id="studentRoll" name="roll" maxlength="30" required placeholder="e.g. 24CSE014"></label>
+          <label class="form-field"><span>Department <b>*</b></span><select id="studentDepartment" name="department" required><option value="">Select department</option><option>CSE</option><option>ECE</option><option>EEE</option><option>Mechanical</option><option>Civil</option><option>IT</option><option>AI &amp; DS</option><option>Other</option></select></label>
+          <label class="form-field"><span>Study year <b>*</b></span><select id="studentYear" name="year" required><option value="1">1st year</option><option value="2">2nd year</option><option value="3">3rd year</option><option value="4">4th year</option></select></label>
+          <label class="form-field"><span>GPA (out of 10) <b>*</b></span><input id="studentGpa" name="gpa" type="number" min="0" max="10" step="0.01" required placeholder="e.g. 8.50"></label>
+          <label class="form-field field-full"><span>Email address <b>*</b></span><input id="studentEmail" name="email" type="email" maxlength="120" required placeholder="student@college.edu"></label>
+          <label class="form-field"><span>Phone number <b>*</b></span><input id="studentPhone" name="phone" type="tel" minlength="7" maxlength="20" required placeholder="+91 98765 43210"></label>
+          <label class="form-field"><span>Status <b>*</b></span><select id="studentStatus" name="status" required><option value="Active">Active</option><option value="Inactive">Inactive</option></select></label>
+        </div>
+        <div class="form-error hidden" id="formError" role="alert"></div>
+        <div class="modal-actions"><button type="button" class="button button-secondary" id="cancelModal">Cancel</button><button type="submit" class="button button-primary" id="saveStudentButton">Save student <span>→</span></button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

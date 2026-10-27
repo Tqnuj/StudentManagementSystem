@@ -1,0 +1,7 @@
+id,name,roll,department,year,email,phone,gpa,status
+1,Aarav Sharma,24CSE014,CSE,2,aarav.sharma@example.test,+91 98765 43210,8.70,Active
+2,Meera Rao,24ECE021,ECE,2,meera.rao@example.test,+91 98765 43211,9.10,Active
+3,Ishaan Verma,23CSE008,CSE,3,ishaan.verma@example.test,+91 98765 43212,7.85,Active
+4,Diya Nair,25AIDS006,AI & DS,1,diya.nair@example.test,+91 98765 43213,8.45,Active
+5,Kabir Reddy,23ME012,Mechanical,3,kabir.reddy@example.test,+91 98765 43214,6.95,Inactive
+6,Ananya Das,24IT019,IT,2,ananya.das@example.test,+91 98765 43215,9.35,Active
